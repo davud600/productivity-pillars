@@ -1,3 +1,6 @@
+import { ContextProviderWrapper } from '@/components/context-provider-wrapper'
+import { ThemeProvider } from '@/components/theme-provider'
+import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -16,7 +19,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(inter.className, 'bg-neutral-950')}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ContextProviderWrapper>{children}</ContextProviderWrapper>
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
