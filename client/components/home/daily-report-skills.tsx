@@ -1,3 +1,4 @@
+import { type DailyReport } from '@/types/daily-reports'
 import { SkillEnum } from '@/types/skills'
 import { DailyReportSkill } from './daily-report-skill'
 

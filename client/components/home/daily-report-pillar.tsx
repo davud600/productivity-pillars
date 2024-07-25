@@ -1,9 +1,14 @@
 'use client'
 
-import { usePillar, useSkillPoints } from '@/hooks/pillars-and-skills'
+import {
+  usePillar,
+  usePillars,
+  useSkillPoints,
+} from '@/hooks/pillars-and-skills'
 import { PillarsEnum } from '@/types/pillars'
+import { SkillDifficultyEnum } from '@/types/skills'
 import { type CheckedState } from '@radix-ui/react-checkbox'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import {
   Select,
@@ -17,13 +22,40 @@ import {
 
 interface DailyReportPillarProps {
   pillarTitle: PillarsEnum
+  initiallyChecked?: boolean
+  initialLevel?: SkillDifficultyEnum
 }
 
-export function DailyReportPillar({ pillarTitle }: DailyReportPillarProps) {
-  const pillar = usePillar(pillarTitle)
+export function DailyReportPillar({
+  pillarTitle,
+  initiallyChecked = false,
+  initialLevel = SkillDifficultyEnum.Easy,
+}: DailyReportPillarProps) {
   const { addPointsOfSkill } = useSkillPoints()
-  const [level, setLevel] = useState(0)
-  const [checked, setChecked] = useState(false)
+  const { checkedPillars, setCheckedPillars } = usePillars()
+  const pillar = usePillar(pillarTitle)
+  const [level, setLevel] = useState<SkillDifficultyEnum>(initialLevel)
+  const [checked, setChecked] = useState(initiallyChecked)
+
+  useEffect(() => {
+    setCheckedPillars((prevCheckedPillars) => {
+      return checked
+        ? [
+            ...prevCheckedPillars.filter(
+              (checkedPillar) => checkedPillar.pillar !== pillarTitle
+            ),
+            {
+              pillar: pillarTitle,
+              level,
+            },
+          ]
+        : [
+            ...prevCheckedPillars.filter(
+              (checkedPillar) => checkedPillar.pillar !== pillarTitle
+            ),
+          ]
+    })
+  }, [checked, level])
 
   if (!!!pillar)
     return (
