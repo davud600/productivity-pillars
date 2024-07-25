@@ -19,7 +19,7 @@ export function DailyReportSkill({ skill }: DailyReportSkillProps) {
     <div className="flex flex-col justify-center items-center gap-4">
       <span className="text-neutral-400 text-base text-center">{skill}</span>
       <span className={cn('text-base text-center font-semibold', statusColor)}>
-        <>+{points || 0} points</>
+        <>+{points || 0} Points</>
       </span>
     </div>
   )

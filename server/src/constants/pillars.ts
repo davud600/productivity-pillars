@@ -1,5 +1,5 @@
-import { PillarsEnum, type PillarData } from '@/types/pillars'
-import { SkillDifficultyEnum, SkillEnum } from '@/types/skills'
+import { PillarsEnum, type PillarData } from '../types/pillars'
+import { SkillDifficultyEnum, SkillEnum } from '../types/skills'
 
 export const PILLARS: PillarData[] = [
   {

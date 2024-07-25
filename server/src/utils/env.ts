@@ -1,15 +1,13 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
 type EnvVariables = {
-  PORT: string | number;
-  CORS_ORIGIN: string;
-  GOOGLE_DRIVE_KEY_FILE_NAME: string;
-};
+  PORT: string | number
+  CORS_ORIGIN: string
+  JWT_SECRET: string
+  JWT_EXPIRATION: string
+}
 
-export const {
-  PORT,
-  CORS_ORIGIN,
-  GOOGLE_DRIVE_KEY_FILE_NAME,
-} = process.env as EnvVariables;
+export const { PORT, CORS_ORIGIN, JWT_SECRET, JWT_EXPIRATION } =
+  process.env as EnvVariables

@@ -1,19 +1,35 @@
+import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { DailyReportPillars } from '@/components/home/daily-report-pillars'
 import { DailyReportSkills } from '@/components/home/daily-report-skills'
 import { DailyReportTitle } from '@/components/home/daily-report-title'
+import { DailyReportsService } from '@/services/daily-reports.service'
 
-export default function Home() {
+export default async function Home() {
+  // const cookieStore = cookies()
+  // const token = cookieStore.get('token')?.value
+
+  // if (!!!token) redirect('/login')
+
+  // const data = await DailyReportsService.all(token)
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-3 md:p-24">
-      <article className="flex flex-col gap-12 border border-neutral-200 rounded-lg max-w-2xl w-full items-center py-16 md:px-10 px-4">
+    <main className="flex min-h-screen flex-col items-center justify-start p-3 md:p-12 gap-24">
+      <section className="flex flex-col gap-10 border border-neutral-200 rounded-lg max-w-2xl w-full items-center py-10 md:px-10 px-4 bg-neutral-950">
         <DailyReportTitle />
-        <section className="flex flex-col gap-5 items-start w-full">
+        <div className="flex flex-col gap-5 items-start w-full">
           <DailyReportPillars />
-        </section>
-        <section className="flex items-center justify-between w-full">
+        </div>
+        <div className="flex items-center justify-between w-full">
           <DailyReportSkills />
-        </section>
-      </article>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-8 items-center">
+        <h1 className="text-xl tracking-wide font-semibold text-neutral-200 text-center">
+          Calendar reports
+        </h1>
+      </section>
     </main>
   )
 }

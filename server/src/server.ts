@@ -1,6 +1,9 @@
 import cors from 'cors'
 import express, { type Router } from 'express'
 import { createServer } from 'http'
+import { authApi } from './api/auth.api'
+import { dailyReportsApi } from './api/daily-reports.api'
+import { usersApi } from './api/users.api'
 
 import { CORS_ORIGIN } from './utils/env'
 
@@ -16,7 +19,7 @@ app.use(
 )
 
 // Init routes and api's
-const routes: Router[] = []
+const routes: Router[] = [authApi, usersApi, dailyReportsApi]
 routes.forEach((route) => {
   app.use(route)
 })

@@ -1,207 +1,80 @@
-import { type PublicUser, type UserData } from '../types/users'
-import { UserDatabaseQueryErrorBase } from './users.errors'
+import fs from 'fs'
+import path from 'path'
+import { DB_DIR } from '../constants/db'
+import { type UserData, type User } from '../types/users'
+import { UsersDatabaseQueryErrorBase } from './users.errors'
+import bcrypt from 'bcrypt'
 
-export const UserService = {
-  get: async (fetchSoftDeleted = false): Promise<PublicUser[]> => {
-    const users = await prisma.user.findMany({
-      where: fetchSoftDeleted
-        ? {
-            deletedAt: {
-              not: null,
-            },
-          }
-        : {
-            deletedAt: null,
-          },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
+const table = 'users.json'
 
-    if (!!!users)
-      throw new UserDatabaseQueryErrorBase({
+export const UsersService = {
+  get: async (username: string): Promise<User> => {
+    const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
+    const usersJson = JSON.parse(bufferData.toString())
+    let { users }: { users: User[] } = usersJson
+
+    if (!!!users) throw Error('Internal Server Error.')
+
+    let i = 1
+    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
+      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
+        const json = require(`/db/${i}/${table}`)
+        users = [...users, ...json.users]
+      }
+
+      i++
+    }
+
+    const user = users.find((user) => user.username === username)
+
+    if (!!!user)
+      throw new UsersDatabaseQueryErrorBase({
         name: 'UNKNOWN',
-        message: 'Failed to retrieve users.',
-        cause: 'Database.',
-      })
-
-    return users as PublicUser[]
-  },
-
-  getById: async (id: number): Promise<PublicUser> => {
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
-
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
-        name: 'NOT_FOUND',
-        message: 'user was not found.',
-        cause: 'Database.',
-      })
-
-    return user as PublicUser
-  },
-
-  getByEmail: async (email: string): Promise<User> => {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
-
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
-        name: 'NOT_FOUND',
-        message: 'user was not found.',
+        message: 'Could not find user.',
         cause: 'Database.',
       })
 
     return user
   },
 
-  create: async (data: UserData): Promise<PublicUser> => {
-    const userData = data
+  create: async (userData: UserData): Promise<User> => {
+    const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
+    const usersJson = JSON.parse(bufferData.toString())
+    let { users }: { users: User[] } = usersJson
 
-    const user = await prisma.user.create({
-      data: { ...userData, password: await bcrypt.hash(userData.password, 10) },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
+    if (!!!users) throw Error('Internal Server Error.')
 
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
-        name: 'UNKNOWN',
-        message: 'Unable to create user.',
-        cause: 'Database.',
-      })
+    let i = 1
+    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
+      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
+        const json = require(`/db/${i}/${table}`)
+        users = [...users, ...json.users]
+      }
 
-    return user as PublicUser
-  },
-
-  update: async (id: number, data: Partial<User>): Promise<PublicUser> => {
-    const userData = data
-
-    if (userData.password && userData.password !== '') {
-      const hashedPassword = await bcrypt.hash(userData.password, 10)
-      userData.password = hashedPassword
+      i++
     }
 
-    const user = await prisma.user.update({
-      where: { id },
-      data: userData,
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
-
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
+    if (!!!users)
+      throw new UsersDatabaseQueryErrorBase({
         name: 'UNKNOWN',
-        message: 'Unable to update user.',
+        message: 'Could not find users.',
         cause: 'Database.',
       })
 
-    return user as PublicUser
-  },
+    const newUser = {
+      ...userData,
+      id: users.length === 0 ? 1 : users[users.length - 1].id + 1,
+      createdAt: new Date().toString(),
+      password: await bcrypt.hash(userData.password, 10),
+    }
 
-  restore: async (id: number): Promise<PublicUser> => {
-    const user = await prisma.user.update({
-      where: { id },
-      data: { deletedAt: null },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
+    const updatedUsers = [...users, newUser]
 
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
-        name: 'UNKNOWN',
-        message: 'Unable to restore user.',
-        cause: 'Database.',
-      })
+    fs.writeFileSync(
+      process.cwd() + `/db/${table}`,
+      JSON.stringify({ users: updatedUsers })
+    )
 
-    return user as PublicUser
-  },
-
-  softDelete: async (id: number): Promise<PublicUser> => {
-    const user = await prisma.user.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
-
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
-        name: 'UNKNOWN',
-        message: 'Unable to soft delete user.',
-        cause: 'Database.',
-      })
-
-    return user as PublicUser
-  },
-
-  delete: async (id: number): Promise<PublicUser> => {
-    const user = await prisma.user.delete({
-      where: { id },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true,
-      },
-    })
-
-    if (!!!user)
-      throw new UserDatabaseQueryErrorBase({
-        name: 'UNKNOWN',
-        message: 'Unable to delete user.',
-        cause: 'Database.',
-      })
-
-    return user as PublicUser
+    return newUser
   },
 }
