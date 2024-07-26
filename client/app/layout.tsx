@@ -1,11 +1,9 @@
 import { ThemeProvider } from '@/components/theme-provider'
+import { ibm_plex_sans } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Productivity pillars',
@@ -19,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, 'bg-neutral-900')}>
+      <body className={cn(ibm_plex_sans.className, 'bg-dark-background')}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

@@ -1,5 +1,9 @@
-import { PillarsEnum, type PillarData } from '@/types/pillars'
-import { SkillDifficultyEnum, SkillEnum } from '@/types/skills'
+import {
+  PillarDifficultyEnum,
+  PillarsEnum,
+  type PillarData,
+} from '@/types/pillars'
+import { SkillEnum } from '@/types/skills'
 
 export const PILLARS: PillarData[] = [
   {
@@ -21,17 +25,17 @@ export const PILLARS: PillarData[] = [
     levels: [
       {
         title: 'Level 1',
-        difficulty: SkillDifficultyEnum.Easy,
+        difficulty: PillarDifficultyEnum.Easy,
         description: '30 min',
       },
       {
         title: 'Level 2',
-        difficulty: SkillDifficultyEnum.Medium,
+        difficulty: PillarDifficultyEnum.Medium,
         description: '45 min',
       },
       {
         title: 'Level 3',
-        difficulty: SkillDifficultyEnum.Hard,
+        difficulty: PillarDifficultyEnum.Hard,
         description: '60 min',
       },
     ],
@@ -59,17 +63,17 @@ export const PILLARS: PillarData[] = [
     levels: [
       {
         title: 'Level 1',
-        difficulty: SkillDifficultyEnum.Easy,
+        difficulty: PillarDifficultyEnum.Easy,
         description: '5 pages',
       },
       {
         title: 'Level 2',
-        difficulty: SkillDifficultyEnum.Medium,
+        difficulty: PillarDifficultyEnum.Medium,
         description: '10 pages',
       },
       {
         title: 'Level 3',
-        difficulty: SkillDifficultyEnum.Hard,
+        difficulty: PillarDifficultyEnum.Hard,
         description: '20 pages',
       },
     ],
@@ -89,17 +93,17 @@ export const PILLARS: PillarData[] = [
     levels: [
       {
         title: 'Level 1',
-        difficulty: SkillDifficultyEnum.Easy,
+        difficulty: PillarDifficultyEnum.Easy,
         description: '1 game',
       },
       {
         title: 'Level 2',
-        difficulty: SkillDifficultyEnum.Medium,
+        difficulty: PillarDifficultyEnum.Medium,
         description: '3 games',
       },
       {
         title: 'Level 3',
-        difficulty: SkillDifficultyEnum.Hard,
+        difficulty: PillarDifficultyEnum.Hard,
         description: '5 games',
       },
     ],
@@ -131,17 +135,17 @@ export const PILLARS: PillarData[] = [
     levels: [
       {
         title: 'Level 1',
-        difficulty: SkillDifficultyEnum.Easy,
+        difficulty: PillarDifficultyEnum.Easy,
         description: 'One (lifting, running or stretching)',
       },
       {
         title: 'Level 2',
-        difficulty: SkillDifficultyEnum.Medium,
+        difficulty: PillarDifficultyEnum.Medium,
         description: 'Two (lifting, running or stretching)',
       },
       {
         title: 'Level 3',
-        difficulty: SkillDifficultyEnum.Hard,
+        difficulty: PillarDifficultyEnum.Hard,
         description: 'Three (lifting, running or stretching)',
       },
     ],

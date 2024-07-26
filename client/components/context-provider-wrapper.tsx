@@ -1,22 +1,13 @@
 'use client'
 
 import React from 'react'
-import {
-  PillarsProvider,
-  SkillPointsProvider,
-} from '@/context/pillars-and-skills-ctx'
 import { AuthProvider } from '@/context/auth-ctx'
+import { DailyReportProvider } from '@/context/daily-report'
 
 export function ContextProviderWrapper({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <AuthProvider>
-      <PillarsProvider>
-        <SkillPointsProvider>{children}</SkillPointsProvider>
-      </PillarsProvider>
-    </AuthProvider>
-  )
+  return <AuthProvider>{children}</AuthProvider>
 }

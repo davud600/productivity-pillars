@@ -1,4 +1,5 @@
 import { ContextProviderWrapper } from '@/components/context-provider-wrapper'
+import { Navbar } from '@/components/navbar'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -11,5 +12,10 @@ export default function HomeLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <ContextProviderWrapper>{children}</ContextProviderWrapper>
+  return (
+    <>
+      <Navbar />
+      <ContextProviderWrapper>{children}</ContextProviderWrapper>
+    </>
+  )
 }

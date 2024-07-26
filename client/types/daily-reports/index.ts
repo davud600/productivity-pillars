@@ -1,10 +1,10 @@
 import { CommonDatabaseFields } from '..'
-import { PillarsEnum } from '../pillars'
-import { SkillDifficultyEnum, SkillPoint } from '../skills'
+import { PillarDifficultyEnum, PillarsEnum } from '../pillars'
+import { SkillPoint } from '../skills'
 
 export type CheckedPillar = {
   pillar: PillarsEnum
-  level: SkillDifficultyEnum
+  level: PillarDifficultyEnum
 }
 
 export type DailyReportData = {

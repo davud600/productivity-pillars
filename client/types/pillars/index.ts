@@ -7,6 +7,12 @@ export enum PillarsEnum {
   Exercise = 'Exercise',
 }
 
+export enum PillarDifficultyEnum {
+  Easy = 0,
+  Medium = 1,
+  Hard = 2,
+}
+
 export type PillarData = {
   title: PillarsEnum
   skillPoints: {

@@ -6,12 +6,6 @@ export enum SkillEnum {
   Focus = 'Focus',
 }
 
-export enum SkillDifficultyEnum { // rename to PillarDifficultyEnum and move to pillars types
-  Easy = 0,
-  Medium = 1,
-  Hard = 2,
-}
-
 export type SkillPoint = {
   skill: SkillEnum
   points: number

@@ -1,15 +1,8 @@
-'use client'
-
-import {
-  usePillar,
-  usePillars,
-  useSkillPoints,
-} from '@/hooks/pillars-and-skills'
-import { PillarsEnum } from '@/types/pillars'
-import { SkillDifficultyEnum } from '@/types/skills'
+import { useDailyReport } from '@/hooks/daily-report'
+import { type PillarData, PillarDifficultyEnum } from '@/types/pillars'
 import { type CheckedState } from '@radix-ui/react-checkbox'
 import { useEffect, useState } from 'react'
-import { Checkbox } from '../ui/checkbox'
+import { Checkbox } from '../../ui/checkbox'
 import {
   Select,
   SelectContent,
@@ -18,62 +11,57 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../ui/select'
+} from '../../ui/select'
 
 interface DailyReportPillarProps {
-  pillarTitle: PillarsEnum
-  initiallyChecked?: boolean
-  initialLevel?: SkillDifficultyEnum
+  pillar: PillarData
+  initiallyChecked: boolean
+  initialLevel: PillarDifficultyEnum
 }
 
 export function DailyReportPillar({
-  pillarTitle,
-  initiallyChecked = false,
-  initialLevel = SkillDifficultyEnum.Easy,
+  pillar,
+  initiallyChecked,
+  initialLevel,
 }: DailyReportPillarProps) {
-  const { addPointsOfSkill } = useSkillPoints()
-  const { checkedPillars, setCheckedPillars } = usePillars()
-  const pillar = usePillar(pillarTitle)
-  const [level, setLevel] = useState<SkillDifficultyEnum>(initialLevel)
+  const { setCheckedPillars } = useDailyReport()
+  const [level, setLevel] = useState(initialLevel)
   const [checked, setChecked] = useState(initiallyChecked)
+
+  useEffect(() => {
+    setLevel(initialLevel)
+  }, [initialLevel])
+
+  useEffect(() => {
+    setChecked(initiallyChecked)
+  }, [initiallyChecked])
 
   useEffect(() => {
     setCheckedPillars((prevCheckedPillars) => {
       return checked
         ? [
             ...prevCheckedPillars.filter(
-              (checkedPillar) => checkedPillar.pillar !== pillarTitle
+              (checkedPillar) => checkedPillar.pillar !== pillar.title
             ),
             {
-              pillar: pillarTitle,
+              pillar: pillar.title,
               level,
             },
           ]
         : [
             ...prevCheckedPillars.filter(
-              (checkedPillar) => checkedPillar.pillar !== pillarTitle
+              (checkedPillar) => checkedPillar.pillar !== pillar.title
             ),
           ]
     })
   }, [checked, level])
 
-  if (!!!pillar)
-    return (
-      <span className="text-lg text-red-500 font-medium">Missing pillar</span>
-    )
-
   const handlePillarCheck = (checked: CheckedState) => {
     if (checked === false || checked === 'indeterminate') {
-      pillar.skillPoints.forEach((skillPoint) => {
-        addPointsOfSkill(skillPoint.skill, -(skillPoint.points + level))
-      })
       setChecked(false)
       return
     }
 
-    pillar.skillPoints.forEach((skillPoint) => {
-      addPointsOfSkill(skillPoint.skill, skillPoint.points + level)
-    })
     setChecked(true)
   }
 
@@ -82,11 +70,6 @@ export function DailyReportPillar({
 
     if (isNaN(newLevel)) return
 
-    if (checked) {
-      pillar.skillPoints.forEach((skillPoint) => {
-        addPointsOfSkill(skillPoint.skill, newLevel - level)
-      })
-    }
     setLevel(newLevel)
   }
 
@@ -95,13 +78,14 @@ export function DailyReportPillar({
       <div className="flex items-start md:space-x-6 space-x-2">
         <Checkbox
           onCheckedChange={handlePillarCheck}
-          id={`${pillarTitle.toLowerCase()}-daily-report`}
+          checked={checked}
+          id={`${pillar.title.toLowerCase()}-daily-report`}
         />
         <label
-          htmlFor={`${pillarTitle.toLowerCase()}-daily-report`}
+          htmlFor={`${pillar.title.toLowerCase()}-daily-report`}
           className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-neutral-400"
         >
-          {pillarTitle}
+          {pillar.title}
         </label>
       </div>
       <div>
@@ -122,7 +106,7 @@ export function DailyReportPillar({
                 >
                   <div className="flex flex-col items-start gap-2">
                     <span className="text-base">{level.title}</span>
-                    <span className="text-sm text-neutral-400 text-left">
+                    <span className="text-sm text-neutral-400 text-left text-nowrap">
                       {level.description}
                     </span>
                   </div>
