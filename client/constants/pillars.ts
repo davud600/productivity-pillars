@@ -3,7 +3,30 @@ import {
   PillarsEnum,
   type PillarData,
 } from '@/types/pillars'
-import { SkillEnum } from '@/types/skills'
+import { SkillEnum, type SkillPoint } from '@/types/skills'
+
+const calculateMaxSkillPoints = (
+  pillars: PillarData[]
+): { [key in SkillEnum]: number } => {
+  const skillMaxPoints: { [key in SkillEnum]: number } = {
+    [SkillEnum.Foresight]: 0,
+    [SkillEnum.Creativity]: 0,
+    [SkillEnum.Expression]: 0,
+    [SkillEnum.Understanding]: 0,
+    [SkillEnum.Focus]: 0,
+  }
+
+  pillars.forEach((pillar) => {
+    pillar.skillPoints.forEach((skillPoint) => {
+      skillMaxPoints[skillPoint.skill] += skillPoint.points
+      skillMaxPoints[skillPoint.skill] += Math.max(
+        ...pillar.levels.map((level) => level.difficulty)
+      )
+    })
+  })
+
+  return skillMaxPoints
+}
 
 export const PILLARS: PillarData[] = [
   {
@@ -151,3 +174,12 @@ export const PILLARS: PillarData[] = [
     ],
   },
 ]
+
+export const SKILL_MAX_POINTS = calculateMaxSkillPoints(PILLARS)
+
+export const INITIAL_SKILL_POINTS: SkillPoint[] = Object.keys(SkillEnum).map(
+  (skill) => ({
+    skill: skill as SkillEnum,
+    points: 0,
+  })
+)

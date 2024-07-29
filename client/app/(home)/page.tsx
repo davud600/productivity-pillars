@@ -1,3 +1,4 @@
+import { Calendar } from '@/components/home/calendar'
 import { DailyReport } from '@/components/home/daily-report'
 
 export default async function Home() {
@@ -7,13 +8,14 @@ export default async function Home() {
         <DailyReport />
       </section>
 
-      {/* <section className="flex flex-col gap-8 items-center">
+      <section className="flex flex-col gap-8 items-center w-full max-w-2xl">
         <h1 className="text-xl tracking-wide font-semibold text-neutral-200 text-center">
           Calendar reports
         </h1>
+        <Calendar />
       </section>
 
-      <section className="flex flex-col gap-8 items-center h-svh">
+      {/* <section className="flex flex-col gap-8 items-center h-svh">
         <h1 className="text-xl tracking-wide font-semibold text-neutral-200 text-center">
           Statistics
         </h1>

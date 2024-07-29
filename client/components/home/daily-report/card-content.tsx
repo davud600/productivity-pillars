@@ -1,14 +1,14 @@
 import { Icons } from '@/components/icons'
-import { useDailyReport } from '@/hooks/daily-report'
+import { useDailyReports } from '@/hooks/daily-reports'
 import { DailyReportPillars } from './pillars'
 import { DailyReportSkills } from './skills'
 
 export function CardContent() {
-  const { fetchedDailyReportData } = useDailyReport()
+  const { fetchedDailyReportsData } = useDailyReports()
 
   return (
     <>
-      {fetchedDailyReportData ? (
+      {!!fetchedDailyReportsData ? (
         <>
           <DailyReportPillars />
           <DailyReportSkills />

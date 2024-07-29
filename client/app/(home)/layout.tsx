@@ -1,4 +1,7 @@
-import { ContextProviderWrapper } from '@/components/context-provider-wrapper'
+import {
+  AuthProviderWrapper,
+  DailyReportsProviderWrapper,
+} from '@/context/provider-wrappers'
 import { Navbar } from '@/components/navbar'
 import type { Metadata } from 'next'
 
@@ -15,7 +18,9 @@ export default function HomeLayout({
   return (
     <>
       <Navbar />
-      <ContextProviderWrapper>{children}</ContextProviderWrapper>
+      <AuthProviderWrapper>
+        <DailyReportsProviderWrapper>{children}</DailyReportsProviderWrapper>
+      </AuthProviderWrapper>
     </>
   )
 }

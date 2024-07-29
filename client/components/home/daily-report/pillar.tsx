@@ -1,4 +1,4 @@
-import { useDailyReport } from '@/hooks/daily-report'
+import { type CheckedPillar } from '@/types/daily-reports'
 import { type PillarData, PillarDifficultyEnum } from '@/types/pillars'
 import { type CheckedState } from '@radix-ui/react-checkbox'
 import { useEffect, useState } from 'react'
@@ -17,14 +17,19 @@ interface DailyReportPillarProps {
   pillar: PillarData
   initiallyChecked: boolean
   initialLevel: PillarDifficultyEnum
+  setCheckedPillars: React.Dispatch<React.SetStateAction<CheckedPillar[]>>
+  day: string // yyyy-MM-dd
+  updatingDailyReportsData: boolean
 }
 
 export function DailyReportPillar({
   pillar,
   initiallyChecked,
   initialLevel,
+  setCheckedPillars,
+  day,
+  updatingDailyReportsData,
 }: DailyReportPillarProps) {
-  const { setCheckedPillars } = useDailyReport()
   const [level, setLevel] = useState(initialLevel)
   const [checked, setChecked] = useState(initiallyChecked)
 
@@ -37,6 +42,7 @@ export function DailyReportPillar({
   }, [initiallyChecked])
 
   useEffect(() => {
+    if (updatingDailyReportsData) return
     setCheckedPillars((prevCheckedPillars) => {
       return checked
         ? [
@@ -57,6 +63,8 @@ export function DailyReportPillar({
   }, [checked, level])
 
   const handlePillarCheck = (checked: CheckedState) => {
+    if (updatingDailyReportsData) return
+
     if (checked === false || checked === 'indeterminate') {
       setChecked(false)
       return
@@ -79,10 +87,10 @@ export function DailyReportPillar({
         <Checkbox
           onCheckedChange={handlePillarCheck}
           checked={checked}
-          id={`${pillar.title.toLowerCase()}-daily-report`}
+          id={`${day}-${pillar.title.toLowerCase()}-daily-report`}
         />
         <label
-          htmlFor={`${pillar.title.toLowerCase()}-daily-report`}
+          htmlFor={`${day}-${pillar.title.toLowerCase()}-daily-report`}
           className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-neutral-400"
         >
           {pillar.title}

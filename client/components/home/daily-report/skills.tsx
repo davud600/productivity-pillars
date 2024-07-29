@@ -1,9 +1,9 @@
-import { useDailyReport } from '@/hooks/daily-report'
+import { useDailyReports } from '@/hooks/daily-reports'
 import { SkillEnum } from '@/types/skills'
 import { DailyReportSkill } from './skill'
 
 export function DailyReportSkills() {
-  const { skillPoints } = useDailyReport()
+  const { skillPoints } = useDailyReports()
 
   return (
     <div className="flex items-center justify-between w-full">

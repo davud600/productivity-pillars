@@ -1,11 +1,12 @@
-import { Icons } from '@/components/icons'
 import { PILLARS } from '@/constants/pillars'
-import { useDailyReport } from '@/hooks/daily-report'
+import { useDailyReports } from '@/hooks/daily-reports'
 import { PillarDifficultyEnum } from '@/types/pillars'
+import { format } from 'date-fns'
 import { DailyReportPillar } from './pillar'
 
 export function DailyReportPillars() {
-  const { checkedPillars } = useDailyReport()
+  const { checkedPillars, setCheckedPillars, updatingDailyReportsData } =
+    useDailyReports()
 
   return (
     <div className="flex flex-col gap-5 items-start w-full">
@@ -23,6 +24,9 @@ export function DailyReportPillars() {
               (checkedPillar) => checkedPillar.pillar === pillar.title
             )?.level || PillarDifficultyEnum.Easy
           }
+          setCheckedPillars={setCheckedPillars}
+          day={format(new Date(), 'yyyy-MM-dd')}
+          updatingDailyReportsData={updatingDailyReportsData}
         />
       ))}
     </div>
