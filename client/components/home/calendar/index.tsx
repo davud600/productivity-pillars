@@ -48,13 +48,15 @@ export function Calendar() {
   const { token } = useAuth()
 
   useEffect(() => {
+    if (!!!token) return
+
     const fetchDailyReports = async () => {
       const data = await DailyReportsService.all(token)
       setDailyReports(data)
     }
 
     fetchDailyReports()
-  }, [])
+  }, [token])
 
   useEffect(() => {
     const start = startOfMonth(new Date(selectedYear, selectedMonth))
