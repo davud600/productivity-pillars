@@ -23,7 +23,7 @@ export const AuthService = {
     return await result.json()
   },
 
-  validateToken: async (token: string): Promise<boolean> => {
+  validateToken: async (token?: string): Promise<void> => {
     const result = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/auth?token=${token}`,
       {
@@ -35,7 +35,5 @@ export const AuthService = {
     )
 
     if (!result.ok) throw new Error(result.statusText)
-
-    return true
   },
 }

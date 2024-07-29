@@ -19,10 +19,35 @@ import { useDailyReports } from '@/hooks/daily-reports'
 import { Icons } from '@/components/icons'
 import { DailyReportModal } from './daily-report-modal'
 import { INITIAL_SKILL_POINTS } from '@/constants/pillars'
+import { type SkillPoint } from '@/types/skills'
 
 interface PillarProps {
   percentage: number
   color: string
+}
+
+export const SKILL_COLORS = {
+  Foresight: 'bg-color-0',
+  Creativity: 'bg-color-1',
+  Expression: 'bg-color-2',
+  Understanding: 'bg-color-3',
+  Focus: 'bg-color-4',
+}
+
+function SkillLegend({ skillPoints }: { skillPoints: SkillPoint[] }) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mb-4">
+      {skillPoints.map((skillPoint, index) => (
+        <div
+          key={index}
+          className="flex items-center md:justify-center justify-start gap-2"
+        >
+          <div className={`w-3 h-3 ${SKILL_COLORS[skillPoint.skill]}`}></div>
+          <span>{skillPoint.skill}</span>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export function Pillar({ percentage, color }: PillarProps) {
@@ -128,6 +153,7 @@ export function Calendar() {
 
   return (
     <div className="text-white p-4 border-header-border border rounded-lg bg-[rgb(13,13,13)] shadow-xl w-full">
+      <SkillLegend skillPoints={INITIAL_SKILL_POINTS} />
       <div className="flex justify-between mb-4 w-full">
         <Select
           value={selectedMonth.toString()}

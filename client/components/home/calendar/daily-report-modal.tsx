@@ -18,7 +18,7 @@ import { format } from 'date-fns'
 import { Calendar } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Pillar } from '.'
+import { Pillar, SKILL_COLORS } from '.'
 import { DailyReportPillar } from '../daily-report/pillar'
 import { DailyReportSkill } from '../daily-report/skill'
 
@@ -127,7 +127,7 @@ export function DailyReportModal({ dailyReportData }: DailyReportModalProps) {
                 percentage={
                   (skillPoint.points / SKILL_MAX_POINTS[skillPoint.skill]) * 100
                 }
-                color={`bg-color-${i}`}
+                color={SKILL_COLORS[skillPoint.skill]}
               />
             ))}
           </div>

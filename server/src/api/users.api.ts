@@ -30,30 +30,3 @@ usersApi.get(`${usersRoutePath}/:username`, async (req, res) => {
       .json({ error: { message: 'Internal server error.' } })
   }
 })
-
-usersApi.post(`${usersRoutePath}`, async (req, res) => {
-  const username = req.body.username
-  const password = req.body.password
-
-  if (!!!username)
-    return res
-      .status(400)
-      .json({ error: { message: 'Invalid input username.' } })
-
-  if (!!!password)
-    return res
-      .status(400)
-      .json({ error: { message: 'Invalid input password.' } })
-
-  try {
-    const user = await UsersService.create({ username, password })
-
-    return res.json({ data: user })
-  } catch (error) {
-    console.error(`post usersApi`, error)
-
-    return res
-      .status(500)
-      .json({ error: { message: 'Internal server error.' } })
-  }
-})
