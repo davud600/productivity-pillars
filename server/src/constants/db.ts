@@ -1,1 +1,1 @@
-export const DB_DIR = '../db'
+export const DB_DIR = './db'

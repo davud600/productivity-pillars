@@ -10,19 +10,9 @@ export const DailyReportsService = {
   all: async (userId: number): Promise<DailyReport[]> => {
     const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
     const dailyReportsJson = JSON.parse(bufferData.toString())
-    let { dailyReports }: { dailyReports: DailyReport[] } = dailyReportsJson
+    const { dailyReports }: { dailyReports: DailyReport[] } = dailyReportsJson
 
     if (!!!dailyReports) throw Error('Internal Server Error.')
-
-    let i = 1
-    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
-      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
-        const json = require(`/db/${i}/${table}`)
-        dailyReports = [...dailyReports, ...json.dailyReports]
-      }
-
-      i++
-    }
 
     return dailyReports.filter((dailyReport) => dailyReport.userId === userId)
   },
@@ -30,19 +20,9 @@ export const DailyReportsService = {
   get: async (day: string, userId: number): Promise<DailyReport> => {
     const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
     const dailyReportsJson = JSON.parse(bufferData.toString())
-    let { dailyReports }: { dailyReports: DailyReport[] } = dailyReportsJson
+    const { dailyReports }: { dailyReports: DailyReport[] } = dailyReportsJson
 
     if (!!!dailyReports) throw Error('Internal Server Error.')
-
-    let i = 1
-    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
-      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
-        const json = require(`/db/${i}/${table}`)
-        dailyReports = [...dailyReports, ...json.dailyReports]
-      }
-
-      i++
-    }
 
     const dailyReport = dailyReports.find(
       (dailyReport) => dailyReport.userId === userId && dailyReport.day === day
@@ -61,19 +41,9 @@ export const DailyReportsService = {
   createOrUpdate: async (data: DailyReportData): Promise<DailyReport> => {
     const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
     const dailyReportsJson = JSON.parse(bufferData.toString())
-    let { dailyReports }: { dailyReports: DailyReport[] } = dailyReportsJson
+    const { dailyReports }: { dailyReports: DailyReport[] } = dailyReportsJson
 
     if (!!!dailyReports) throw Error('Internal Server Error.')
-
-    let i = 1
-    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
-      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
-        const json = require(`/db/${i}/${table}`)
-        dailyReports = [...dailyReports, ...json.dailyReports]
-      }
-
-      i++
-    }
 
     const dailyReport: DailyReport = {
       ...data,

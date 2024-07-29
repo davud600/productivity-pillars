@@ -8,22 +8,22 @@ import bcrypt from 'bcrypt'
 const table = 'users.json'
 
 export const UsersService = {
-  get: async (username: string): Promise<User> => {
+  all: async (): Promise<User[]> => {
     const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
     const usersJson = JSON.parse(bufferData.toString())
-    let { users }: { users: User[] } = usersJson
+    const { users }: { users: User[] } = usersJson
 
     if (!!!users) throw Error('Internal Server Error.')
 
-    let i = 1
-    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
-      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
-        const json = require(`/db/${i}/${table}`)
-        users = [...users, ...json.users]
-      }
+    return users
+  },
 
-      i++
-    }
+  get: async (username: string): Promise<User> => {
+    const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
+    const usersJson = JSON.parse(bufferData.toString())
+    const { users }: { users: User[] } = usersJson
+
+    if (!!!users) throw Error('Internal Server Error.')
 
     const user = users.find((user) => user.username === username)
 
@@ -40,19 +40,9 @@ export const UsersService = {
   create: async (userData: UserData): Promise<User> => {
     const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
     const usersJson = JSON.parse(bufferData.toString())
-    let { users }: { users: User[] } = usersJson
+    const { users }: { users: User[] } = usersJson
 
     if (!!!users) throw Error('Internal Server Error.')
-
-    let i = 1
-    while (fs.existsSync(path.join(DB_DIR, i.toString()))) {
-      if (fs.existsSync(path.join(DB_DIR, `${i}/${table}`))) {
-        const json = require(`/db/${i}/${table}`)
-        users = [...users, ...json.users]
-      }
-
-      i++
-    }
 
     if (!!!users)
       throw new UsersDatabaseQueryErrorBase({
