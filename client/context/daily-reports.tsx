@@ -102,7 +102,7 @@ export function DailyReportsProvider({ children }: { children: ReactNode }) {
     toast.promise(createOrUpdateDailyReportRes, {
       loading: 'Loading...',
       success: () => {
-        setTimeout(() => setUpdatingDailyReportsData(false), 1000)
+        setTimeout(() => setUpdatingDailyReportsData(false), 250)
         return (
           <span className="text-green-400 font-medium">
             Updated daily report

@@ -47,7 +47,11 @@ export function Navbar() {
 
       {/* Mobile */}
       <div className="justify-between items-center px-8 h-full max-w-[1340px] ml-auto mr-auto md:hidden flex">
-        <BrainCog className="w-8 h-8" />
+        <Button asChild className="p-0" variant="ghost">
+          <Link href="/">
+            <BrainCog className="w-8 h-8" />
+          </Link>
+        </Button>
         <div
           ref={mobileLinksContainerRef}
           className="flex-col flex w-screen absolute left-0 transition-all duration-300 -z-10 h-fit items-center justify-start text-base bg-dark-secondary"
@@ -58,7 +62,7 @@ export function Navbar() {
         >
           <Button
             asChild
-            className="py-6 border-t-header-border border-t border-b-header-border border-b w-full text-center"
+            className="py-6 border-b-header-border border-b w-full text-center rounded-none"
             variant="ghost"
           >
             <Link href="/profile">
@@ -67,7 +71,7 @@ export function Navbar() {
           </Button>
           <Button
             asChild
-            className="py-6 border-t-header-border border-t border-b-header-border border-b w-full text-center"
+            className="py-6 border-b-header-border border-b w-full text-center rounded-none"
             variant="ghost"
           >
             <Link href="/login">

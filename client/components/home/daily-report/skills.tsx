@@ -6,7 +6,7 @@ export function DailyReportSkills() {
   const { skillPoints } = useDailyReports()
 
   return (
-    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center justify-around w-full">
       {Object.keys(SkillEnum).map((skill) => (
         <DailyReportSkill
           key={skill}

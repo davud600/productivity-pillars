@@ -87,7 +87,7 @@ export function DailyReportModal({ dailyReportData }: DailyReportModalProps) {
     toast.promise(createOrUpdateDailyReportRes, {
       loading: 'Loading...',
       success: () => {
-        setTimeout(() => setUpdatingDailyReportsData(false), 1000)
+        setTimeout(() => setUpdatingDailyReportsData(false), 250)
         return (
           <span className="text-green-400 font-medium">
             Updated daily report
@@ -108,7 +108,7 @@ export function DailyReportModal({ dailyReportData }: DailyReportModalProps) {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger className="cursor-pointer hover:bg-[rgb(20,20,20)] transition-all text-center border-0 border-header-border p-2 flex flex-col items-center bg-[rgb(13,13,13)]">
+        <DialogTrigger className="cursor-pointer hover:bg-[rgb(20,20,20)] transition-all text-center border-0 border-header-border p-1 md:p-2 flex flex-col items-center bg-[rgb(13,13,13)]">
           <div
             style={{
               color:

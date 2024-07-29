@@ -34,9 +34,9 @@ export const SKILL_COLORS = {
   Focus: 'bg-color-4',
 }
 
-function SkillLegend({ skillPoints }: { skillPoints: SkillPoint[] }) {
+function SkillLegends({ skillPoints }: { skillPoints: SkillPoint[] }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mb-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mb-8 mt-4 px-4">
       {skillPoints.map((skillPoint, index) => (
         <div
           key={index}
@@ -126,7 +126,7 @@ export function Calendar() {
 
       daysArray.push(
         <DailyReportModal
-          key={index}
+          key={format(day, 'yyyy-MM-dd')}
           dailyReportData={
             dailyReportData || {
               skillPoints: INITIAL_SKILL_POINTS,
@@ -152,9 +152,9 @@ export function Calendar() {
   }
 
   return (
-    <div className="text-white p-4 border-header-border border rounded-lg bg-[rgb(13,13,13)] shadow-xl w-full">
-      <SkillLegend skillPoints={INITIAL_SKILL_POINTS} />
-      <div className="flex justify-between mb-4 w-full">
+    <div className="text-white p-0 border-header-border border rounded-lg bg-[rgb(13,13,13)] shadow-xl w-full">
+      <SkillLegends skillPoints={INITIAL_SKILL_POINTS} />
+      <div className="flex justify-between mb-12 px-4 w-full">
         <Select
           value={selectedMonth.toString()}
           onValueChange={handleMonthChange}
@@ -167,7 +167,7 @@ export function Calendar() {
               <SelectLabel>Select Month</SelectLabel>
               {range(0, 12).map((month) => (
                 <SelectItem key={month} value={month.toString()}>
-                  {format(new Date(2024, month), 'MMMM')}
+                  {format(new Date(selectedYear, month), 'MMMM')}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -184,7 +184,12 @@ export function Calendar() {
             <SelectGroup>
               <SelectLabel>Select Year</SelectLabel>
               {range(2024, 2026).map((year) => (
-                <SelectItem key={year} value={year.toString()}>
+                <SelectItem
+                  key={year}
+                  value={year.toString()}
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
                   {year}
                 </SelectItem>
               ))}
@@ -197,7 +202,7 @@ export function Calendar() {
           {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
             <div
               key={day}
-              className="text-center bg-[rgb(13,13,13)] text-neutral-400"
+              className="md:text-base text-sm text-center bg-[rgb(13,13,13)] text-neutral-400"
             >
               {day}
             </div>
@@ -206,7 +211,7 @@ export function Calendar() {
         </div>
       ) : (
         <div className="w-full h-full flex justify-center items-center">
-          <Icons.spinner className="mr-2 md:h-10 h-8 md:w-10 w-8 animate-spin" />
+          <Icons.spinner className="mr-2 md:h-10 h-8 md:w-10 w-8 animate-spin mb-8" />
         </div>
       )}
     </div>

@@ -31,7 +31,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       success: (data) => {
         Cookies.set('token', data.token)
         setIsLoading(false)
-        setTimeout(() => window.location.replace('/'), 1000)
+        setTimeout(() => window.location.replace('/'), 500)
 
         return (
           <span className="text-green-600 font-medium">Login successful.</span>
