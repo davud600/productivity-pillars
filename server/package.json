@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build && node build/test/create-initial-users.js",
     "start:dev": "npx nodemon",
     "build": "node db/generate-db.js && rimraf ./build && tsc",
-    "start": "npm run build && node build/seed/users.js && node build/index.js"
+    "start": "npm run build && node build/index.js"
   },
   "keywords": [],
   "author": "",
@@ -19,11 +18,13 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.12",
     "nodemon": "^3.1.4",
+    "prisma": "^5.17.0",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@prisma/client": "^5.17.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
