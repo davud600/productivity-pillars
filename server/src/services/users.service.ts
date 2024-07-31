@@ -1,70 +1,54 @@
-import fs from 'fs'
-import path from 'path'
-import { DB_DIR } from '../constants/db'
+import { PrismaClient } from '@prisma/client'
 import { type UserData, type User } from '../types/users'
 import { UsersDatabaseQueryErrorBase } from './users.errors'
 import bcrypt from 'bcrypt'
 
-const table = 'users.json'
+const prisma = new PrismaClient()
 
 export const UsersService = {
   all: async (): Promise<User[]> => {
-    const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
-    const usersJson = JSON.parse(bufferData.toString())
-    const { users }: { users: User[] } = usersJson
-
-    if (!!!users) throw Error('Internal Server Error.')
-
-    return users
+    try {
+      const users = await prisma.user.findMany()
+      return users as User[]
+    } catch (error) {
+      throw new Error('Internal Server Error.')
+    }
   },
 
   get: async (username: string): Promise<User> => {
-    const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
-    const usersJson = JSON.parse(bufferData.toString())
-    const { users }: { users: User[] } = usersJson
-
-    if (!!!users) throw Error('Internal Server Error.')
-
-    const user = users.find((user) => user.username === username)
-
-    if (!!!user)
-      throw new UsersDatabaseQueryErrorBase({
-        name: 'UNKNOWN',
-        message: 'Could not find user.',
-        cause: 'Database.',
+    try {
+      const user = await prisma.user.findUnique({
+        where: { username },
       })
 
-    return user
+      if (!!!user) {
+        throw new UsersDatabaseQueryErrorBase({
+          name: 'UNKNOWN',
+          message: 'Could not find user.',
+          cause: 'Database.',
+        })
+      }
+
+      return user as User
+    } catch (error) {
+      throw new Error('Internal Server Error.')
+    }
   },
 
   create: async (userData: UserData): Promise<User> => {
-    const bufferData = fs.readFileSync(process.cwd() + `/db/${table}`)
-    const usersJson = JSON.parse(bufferData.toString())
-    const { users }: { users: User[] } = usersJson
-
-    if (!!!users) throw Error('Internal Server Error.')
-
-    if (!!!users)
-      throw new UsersDatabaseQueryErrorBase({
-        name: 'UNKNOWN',
-        message: 'Could not find users.',
-        cause: 'Database.',
+    try {
+      const hashedPassword = await bcrypt.hash(userData.password, 10)
+      const newUser = await prisma.user.create({
+        data: {
+          ...userData,
+          password: hashedPassword,
+          createdAt: new Date(),
+        },
       })
 
-    const newUser = {
-      ...userData,
-      id: users.length === 0 ? 1 : users[users.length - 1].id + 1,
-      createdAt: new Date().toString(),
-      password: await bcrypt.hash(userData.password, 10),
+      return newUser as User
+    } catch (error) {
+      throw new Error('Internal Server Error.')
     }
-
-    const updatedUsers = [...users, newUser]
-
-    fs.writeFileSync(
-      process.cwd() + `/db/${table}`,
-      JSON.stringify({ users: updatedUsers })
-    )
-
-    return newUser
   },
 }
